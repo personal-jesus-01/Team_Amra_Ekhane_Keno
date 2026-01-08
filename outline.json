@@ -1,0 +1,14 @@
+{
+  "slides": [
+    {
+      "title": "Diagram Test",
+      "content": "Testing diagram slide type",
+      "slide_type": "title"
+    },
+    {
+      "title": "Implementation Process",
+      "content": "Step-by-step diagram of implementing green computing",
+      "slide_type": "diagram"
+    }
+  ]
+}
