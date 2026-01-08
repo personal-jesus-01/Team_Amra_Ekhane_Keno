@@ -244,6 +244,10 @@ SlideBanai/
 
 ---
 
+## ER DIGRAM
+
+https://www.mermaidchart.com/d/c1d3aa84-7ade-465d-941a-98a19bd847dd
+
 ## 🔧 Engineering Standards
 
 ### SOLID Principles Implementation
