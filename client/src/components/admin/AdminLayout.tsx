@@ -78,7 +78,7 @@ export function AdminLayout({ children, title, subtitle }: AdminLayoutProps) {
           {!collapsed && (
             <Link href="/admin/dashboard">
               <span className="font-display text-xl text-primary tracking-wider cursor-pointer" data-testid="logo-text">
-                SlideForge
+                Slide Banai
               </span>
             </Link>
           )}
@@ -145,7 +145,7 @@ export function AdminLayout({ children, title, subtitle }: AdminLayoutProps) {
               </Avatar>
               <div className="flex-1 min-w-0">
                 <p className="text-sm font-medium truncate">Super Admin</p>
-                <p className="text-xs text-muted-foreground truncate">admin@slideforge.io</p>
+                <p className="text-xs text-muted-foreground truncate">admin@slidebanai.io</p>
               </div>
             </div>
           ) : (

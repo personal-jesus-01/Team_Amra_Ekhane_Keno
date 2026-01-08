@@ -310,7 +310,7 @@ export default function Settings() {
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div>
                   <Label>Merchant ID</Label>
-                  <Input defaultValue="SLIDEFORGE123" className="mt-1.5" />
+                  <Input defaultValue="SLIDEBANAI123" className="mt-1.5" />
                 </div>
                 <div>
                   <Label>App Key</Label>
@@ -335,7 +335,7 @@ export default function Settings() {
               </div>
               <div>
                 <Label>Callback URL</Label>
-                <Input defaultValue="https://slideforge.io/api/bkash/callback" className="mt-1.5" />
+                <Input defaultValue="https://slidebanai.io/api/bkash/callback" className="mt-1.5" />
               </div>
               <div className="flex items-center justify-between">
                 <div>
@@ -394,7 +394,7 @@ export default function Settings() {
               </div>
               <div>
                 <Label>From Email</Label>
-                <Input defaultValue="noreply@slideforge.io" className="mt-1.5" />
+                <Input defaultValue="noreply@slidebanai.io" className="mt-1.5" />
               </div>
               <Button className="bg-primary hover:bg-primary/90" data-testid="button-save-notifications">
                 <Save className="h-4 w-4 mr-2" />
