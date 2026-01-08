@@ -1,50 +1,38 @@
-import { Switch, Route } from "wouter";
-import { QueryClientProvider } from "@tanstack/react-query";
+import { Switch, Route, Redirect } from "wouter";
 import { queryClient } from "./lib/queryClient";
+import { QueryClientProvider } from "@tanstack/react-query";
 import { Toaster } from "@/components/ui/toaster";
+import { TooltipProvider } from "@/components/ui/tooltip";
 import NotFound from "@/pages/not-found";
-import AuthPage from "@/pages/auth-page";
-import DashboardPage from "@/pages/dashboard-page";
-import PresentationsPage from "@/pages/presentations-page";
-import EditorPage from "@/pages/editor-page";
-import CoachPage from "@/pages/coach-page";
-import AICoachPage from "@/pages/ai-coach-page";
-import PracticePage from "@/pages/practice-page";
-import SimplePracticePage from "@/pages/simple-practice-page";
-import AICoachSelfPractice from "@/pages/ai-coach-self-practice";
-import SubscriptionPage from "@/pages/subscription-page";
-import ApiTestPage from "@/pages/api-test-page";
-import OcrTestPage from "@/pages/ocr-test-page";
-import CanvaPage from "@/pages/canva-page";
-import GoogleSlidesPage from "@/pages/google-slides-page";
-import TestTranscriptionPage from "@/pages/test-transcription-page";
-import SharedPage from "@/pages/shared-page";
-import SettingsPage from "@/pages/settings-page";
-import { ProtectedRoute } from "./lib/protected-route";
-import { AuthProvider } from "./hooks/use-auth";
+import Dashboard from "@/pages/admin/Dashboard";
+import Users from "@/pages/admin/Users";
+import UserDetails from "@/pages/admin/UserDetails";
+import Subscriptions from "@/pages/admin/Subscriptions";
+import Slides from "@/pages/admin/Slides";
+import AIUsage from "@/pages/admin/AIUsage";
+import Assessments from "@/pages/admin/Assessments";
+import Payments from "@/pages/admin/Payments";
+import Settings from "@/pages/admin/Settings";
+import Support from "@/pages/admin/Support";
+import Logs from "@/pages/admin/Logs";
 
 function Router() {
   return (
     <Switch>
-      <Route path="/auth" component={AuthPage} />
-      <ProtectedRoute path="/" component={DashboardPage} />
-      <ProtectedRoute path="/presentations" component={PresentationsPage} />
-      <ProtectedRoute path="/presentations/:id" component={EditorPage} />
-      <ProtectedRoute path="/editor/:id" component={EditorPage} />
-      <ProtectedRoute path="/editor" component={EditorPage} />
-      <ProtectedRoute path="/shared" component={SharedPage} />
-      <ProtectedRoute path="/google-slides" component={GoogleSlidesPage} />
-      <ProtectedRoute path="/coach" component={CoachPage} />
-      <ProtectedRoute path="/ai-coach" component={AICoachPage} />
-      <ProtectedRoute path="/practice" component={PracticePage} />
-      <ProtectedRoute path="/simple-practice" component={SimplePracticePage} />
-      <ProtectedRoute path="/ai-coach-self-practice" component={AICoachSelfPractice} />
-      <ProtectedRoute path="/canva" component={CanvaPage} />
-      <ProtectedRoute path="/subscription" component={SubscriptionPage} />
-      <ProtectedRoute path="/settings" component={SettingsPage} />
-      <ProtectedRoute path="/api-test" component={ApiTestPage} />
-      <ProtectedRoute path="/ocr-test" component={OcrTestPage} />
-      <ProtectedRoute path="/test-transcription" component={TestTranscriptionPage} />
+      <Route path="/">
+        <Redirect to="/admin/dashboard" />
+      </Route>
+      <Route path="/admin/dashboard" component={Dashboard} />
+      <Route path="/admin/users" component={Users} />
+      <Route path="/admin/users/:id" component={UserDetails} />
+      <Route path="/admin/subscriptions" component={Subscriptions} />
+      <Route path="/admin/slides" component={Slides} />
+      <Route path="/admin/ai-usage" component={AIUsage} />
+      <Route path="/admin/assessments" component={Assessments} />
+      <Route path="/admin/payments" component={Payments} />
+      <Route path="/admin/settings" component={Settings} />
+      <Route path="/admin/support" component={Support} />
+      <Route path="/admin/logs" component={Logs} />
       <Route component={NotFound} />
     </Switch>
   );
@@ -53,10 +41,10 @@ function Router() {
 function App() {
   return (
     <QueryClientProvider client={queryClient}>
-      <AuthProvider>
-        <Router />
+      <TooltipProvider>
         <Toaster />
-      </AuthProvider>
+        <Router />
+      </TooltipProvider>
     </QueryClientProvider>
   );
 }

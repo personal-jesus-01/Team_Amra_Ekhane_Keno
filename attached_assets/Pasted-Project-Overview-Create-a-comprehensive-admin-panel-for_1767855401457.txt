@@ -1,0 +1,306 @@
+Project Overview
+Create a comprehensive admin panel for an AI-powered presentation platform that automates slide creation using OCR, Gen AI, and adaptive learning. The platform has these core features:
+
+Document upload with OCR processing
+
+Content filtering by tone/length
+
+AI-generated presentation-ready slides
+
+Slide quality assessment and improvement suggestions
+
+Speech recognition for presentation skills scoring
+
+Bangla speech recognition support
+
+Bkash payment integration (no Visa required)
+
+Design Requirements
+Use the provided Tailwind CSS configuration with dark mode support
+
+Color scheme: Primary custom color #886CDD, secondary dark #222222, secondary light #FFFFFF
+
+Fonts: Title (Nico Moji), Primary (Orbitron), Secondary (League Spartan)
+
+Modern, clean dashboard design with sidebar navigation
+
+Responsive for desktop and tablet
+
+Use shadcn/ui components where appropriate
+
+Required Admin Panel Features
+1. Dashboard Overview
+Statistics cards showing:
+
+Total users
+
+Active subscriptions
+
+Slides generated today/week/month
+
+AI usage credits consumed
+
+Revenue summary (Bkash transactions)
+
+Recent activity feed
+
+System health monitoring
+
+Quick action buttons
+
+2. User Management
+User listing with search, filter, and sort
+
+User details view showing:
+
+Profile information
+
+Subscription status
+
+Presentation history
+
+AI usage statistics
+
+Payment history (Bkash transactions)
+
+User status toggle (active/suspended)
+
+Export user data functionality
+
+3. Subscription Management
+Subscription plans listing
+
+Create/edit subscription plans with:
+
+Name, description, price (BDT)
+
+AI usage limits (credits per month)
+
+OCR processing limits
+
+Storage limits
+
+Feature access (Bangla speech, advanced analytics, etc.)
+
+View active subscriptions
+
+Manual subscription override/extension
+
+Billing history with Bkash transaction IDs
+
+4. Slides Management
+All generated slides listing
+
+Filter by:
+
+User
+
+Date range
+
+Slide quality score
+
+Source document type
+
+View slide details:
+
+Original document preview
+
+OCR extracted text
+
+Generated slides content
+
+AI assessment scores
+
+Improvement suggestions
+
+Batch operations (delete, archive)
+
+Search slides by content/keywords
+
+5. AI Usage & Analytics
+AI usage dashboard showing:
+
+Credits consumption over time
+
+Most used AI features (OCR, slide generation, speech recognition)
+
+Bangla vs English speech processing stats
+
+Cost analysis per feature
+
+Usage limits monitoring
+
+Set global AI usage limits
+
+View detailed logs of AI processing
+
+Export analytics reports
+
+6. Presentation Assessment
+View all presentation recordings
+
+Filter by:
+
+User
+
+Date
+
+Presentation score
+
+Language (Bangla/English)
+
+Detailed assessment view showing:
+
+Speech analysis (pace, clarity, tone)
+
+Content alignment with slides
+
+Improvement suggestions
+
+Score breakdown
+
+Download assessment reports
+
+7. Payment Management (Bkash)
+Payment transactions listing
+
+Bkash transaction verification
+
+Manual payment entry
+
+Payment status management
+
+Revenue reports and analytics
+
+Failed payment handling
+
+Refund processing interface
+
+8. System Configuration
+AI model settings (API keys, endpoints)
+
+OCR settings
+
+Speech recognition settings (including Bangla)
+
+Email/SMS notification templates
+
+Platform maintenance mode toggle
+
+Feature flags management
+
+Backup and restore options
+
+9. Support & Communication
+User support tickets
+
+Announcement system
+
+Broadcast notifications
+
+User feedback viewing
+
+System announcements
+
+Technical Requirements
+Role-based access control (Admin, Moderator, Support)
+
+Real-time notifications for system alerts
+
+Data export in CSV/Excel format
+
+Audit logs for all admin actions
+
+Responsive sidebar navigation with collapsible option
+
+Breadcrumb navigation
+
+Loading states for all async operations
+
+Form validation with error handling
+
+Confirmation dialogs for destructive actions
+
+Toast notifications for user feedback
+
+Pages Structure
+/admin/dashboard - Overview
+
+/admin/users - User management
+
+/admin/users/[id] - User details
+
+/admin/subscriptions - Subscription plans
+
+/admin/subscriptions/active - Active subscriptions
+
+/admin/slides - Slides management
+
+/admin/ai-usage - AI analytics
+
+/admin/assessments - Presentation assessments
+
+/admin/payments - Bkash payments
+
+/admin/settings - System configuration
+
+/admin/support - Support tickets
+
+/admin/logs - Audit logs
+
+Data Visualization Requirements
+Charts for usage statistics (using Chart.js or Recharts)
+
+Line charts for growth metrics
+
+Pie charts for feature usage distribution
+
+Bar charts for revenue analysis
+
+Heatmaps for peak usage times
+
+Integration Points
+Bkash payment API integration
+
+AI service APIs monitoring
+
+Email/SMS service configuration
+
+File storage management
+
+Database backup interface
+
+Additional Features
+Dark/light mode toggle
+
+Admin profile management
+
+Two-factor authentication for admin login
+
+Session management
+
+API key management for external services
+
+Rate limiting configuration
+
+Error logging and monitoring dashboard
+
+Implementation Notes:
+
+Use the provided color palette consistently
+
+Ensure all interactive elements have proper hover/focus states
+
+Implement proper loading skeletons
+
+Add tooltips for complex features
+
+Include help documentation accessible from each section
+
+Make sure all tables are paginated for performance
+
+Add keyboard shortcuts for common actions
+
+Include data filtering and advanced search capabilities
+
+This admin panel should provide comprehensive control over the presentation platform while maintaining an intuitive and efficient user experience for administrators.
