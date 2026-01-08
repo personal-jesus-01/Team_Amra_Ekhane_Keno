@@ -32,6 +32,11 @@ SlideBanai is a comprehensive AI-powered platform that combines **automated pres
 ## 🎯 Theme Alignment
 
 **Theme: AI-Powered Education & Productivity Tools**
+**We Chose**
+**Wonder 4 -> Agentic AI -> The whole presentation making system, TTS, Video Decoding**
+**Wonder 6 -> Generative AI -> Generating Presentation Content, Speech**
+**Wonder 10 -> Adaptive Learning -> Guided Learning for Users**
+
 
 ### How We Align:
 
@@ -85,6 +90,48 @@ SlideBanai is a comprehensive AI-powered platform that combines **automated pres
 - **Role Management**: Owner, Editor, Viewer roles
 - **Email Invitations**: Automatically notify collaborators
 - **Access Control**: Row-level security ensures data privacy
+
+### # Adaptive Learning System - Agentic AI Implementation
+
+## Overview
+
+SlideBanai now features an **Adaptive Learning System** powered by an autonomous AI agent that personalizes the coaching experience based on each user's performance, learning patterns, and skill progression.
+
+## 🤖 How the AI Agent Works
+
+The adaptive learning agent operates autonomously through the following workflow:
+
+### 1. **Continuous Assessment**
+- Analyzes every practice session in real-time
+- Tracks 6 core skills: Content Coverage, Fluency, Clarity, Confidence, Pace, Pronunciation
+- Records performance scores in the database
+- Calculates learning velocity (rate of improvement)
+
+### 2. **Intelligent Decision Making**
+- Uses GPT-4o to analyze user performance patterns
+- Determines optimal difficulty level (0-100 scale)
+- Selects appropriate feedback strategy:
+  - **Encouraging**: For beginners (scores < 50%)
+  - **Balanced**: For intermediate learners (50-70%)
+  - **Constructive**: For advanced users (70-85%)
+  - **Challenging**: For experts (85%+)
+
+### 3. **Dynamic Difficulty Adjustment**
+The agent automatically adjusts difficulty based on performance:
+- **Increase**: If user scores consistently 80%+ (task too easy)
+- **Maintain**: If user scores 45-75% (optimal challenge)
+- **Decrease**: If user scores <45% (task too hard)
+
+### 4. **Personalized Exercise Generation**
+- AI generates custom practice exercises targeting weak skills
+- Exercises adapt to user level and difficulty preference
+- Types: Breathing, Pacing, Articulation, Content Structuring
+
+### 5. **Progress Tracking**
+- Identifies strong and weak areas
+- Tracks skill progression trends (improving/stable/declining)
+- Records milestones and achievements
+- Monitors practice streaks
 
 ### 📊 Analytics
 
