@@ -1,0 +1,1296 @@
+{
+  "info": {
+    "name": "SlideBanai API",
+    "description": "Complete API documentation for SlideBanai - AI-Powered Presentation Platform with Analytics & Collaboration",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "version": "1.0.0"
+  },
+  "item": [
+    {
+      "name": "Authentication",
+      "item": [
+        {
+          "name": "Login",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"user@example.com\",\n  \"password\": \"password123\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/auth/login",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "auth",
+                "login"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Dev Token (Testing)",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer dev-test-token"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/presentations",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "presentations"
+              ]
+            },
+            "description": "Use this header for development/testing: Authorization: Bearer dev-test-token"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Presentations",
+      "item": [
+        {
+          "name": "Get All Presentations",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer dev-test-token"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/presentations",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "presentations"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Create Presentation",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer dev-test-token"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"Product Launch Q1 2026\",\n  \"description\": \"Comprehensive product launch presentation\",\n  \"status\": \"draft\",\n  \"slides_count\": 0\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/presentations",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "presentations"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Get Presentation by ID",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer dev-test-token"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/presentations/1",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "presentations",
+                "1"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Update Presentation",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer dev-test-token"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"Updated Title\",\n  \"description\": \"Updated description\",\n  \"status\": \"published\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/presentations/1",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "presentations",
+                "1"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Delete Presentation",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer dev-test-token"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/presentations/1",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "presentations",
+                "1"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Presentation Integrations",
+      "item": [
+        {
+          "name": "Get Integration",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer dev-test-token"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/presentations/1/integrations",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "presentations",
+                "1",
+                "integrations"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Create Google Slides Integration",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer dev-test-token"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"provider\": \"google_slides\",\n  \"external_id\": \"1BxiMVs0XRA5nFMwSxQSFZwCW_8NrWrb6how-SVndUX8\",\n  \"edit_url\": \"https://docs.google.com/presentation/d/1BxiMVs0XRA5nFMwSxQSFZwCW_8NrWrb6how-SVndUX8/edit\",\n  \"view_url\": \"https://docs.google.com/presentation/d/1BxiMVs0XRA5nFMwSxQSFZwCW_8NrWrb6how-SVndUX8/preview\",\n  \"thumbnail_url\": \"https://lh3.googleusercontent.com/...\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/presentations/1/integrations",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "presentations",
+                "1",
+                "integrations"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Slides",
+      "item": [
+        {
+          "name": "Get All Slides",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer dev-test-token"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/presentations/1/slides",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "presentations",
+                "1",
+                "slides"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Create Slide",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer dev-test-token"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"slide_number\": 1,\n  \"content\": \"# Welcome to SlideBanai\\n\\nAI-Powered Presentation Platform\",\n  \"background_color\": \"#FFFFFF\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/presentations/1/slides",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "presentations",
+                "1",
+                "slides"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Get Slide by ID",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer dev-test-token"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/presentations/1/slides/1",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "presentations",
+                "1",
+                "slides",
+                "1"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Update Slide",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer dev-test-token"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"content\": \"# Updated Slide Content\",\n  \"background_color\": \"#F0F0F0\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/presentations/1/slides/1",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "presentations",
+                "1",
+                "slides",
+                "1"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Delete Slide",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer dev-test-token"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/presentations/1/slides/1",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "presentations",
+                "1",
+                "slides",
+                "1"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Collaborators",
+      "item": [
+        {
+          "name": "Get All Collaborators",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer dev-test-token"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/collaboration/1",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "collaboration",
+                "1"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Add Collaborator",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer dev-test-token"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"userId\": 2,\n  \"role\": \"editor\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/collaboration/1",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "collaboration",
+                "1"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Update Collaborator Role",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer dev-test-token"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"role\": \"viewer\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/collaboration/1/2",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "collaboration",
+                "1",
+                "2"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Remove Collaborator",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer dev-test-token"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/collaboration/1/2",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "collaboration",
+                "1",
+                "2"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Analytics",
+      "item": [
+        {
+          "name": "Get Dashboard Analytics",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer dev-test-token"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/analytics/dashboard",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "analytics",
+                "dashboard"
+              ]
+            },
+            "description": "Get comprehensive dashboard analytics including user stats, trends, top presentations, and language performance"
+          }
+        },
+        {
+          "name": "Get Presentation Analytics",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer dev-test-token"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/analytics/presentation/1",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "analytics",
+                "presentation",
+                "1"
+              ]
+            },
+            "description": "Get detailed analytics for a specific presentation"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Collaboration Features",
+      "item": [
+        {
+          "name": "Get Collaboration Overview",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer dev-test-token"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/collaboration/overview",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "collaboration",
+                "overview"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Get Collaboration Statistics",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer dev-test-token"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/collaboration/stats",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "collaboration",
+                "stats"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Get Recent Collaborations",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer dev-test-token"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/collaboration/recent?limit=10",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "collaboration",
+                "recent"
+              ],
+              "query": [
+                {
+                  "key": "limit",
+                  "value": "10"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Get Collaboration Suggestions",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer dev-test-token"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/collaboration/suggestions",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "collaboration",
+                "suggestions"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Get Active Collaborators",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer dev-test-token"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/collaboration/presentations/1/active",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "collaboration",
+                "presentations",
+                "1",
+                "active"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Get Collaboration Timeline",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer dev-test-token"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/collaboration/presentations/1/timeline?hours=24",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "collaboration",
+                "presentations",
+                "1",
+                "timeline"
+              ],
+              "query": [
+                {
+                  "key": "hours",
+                  "value": "24"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Check Presentation Access",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer dev-test-token"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/collaboration/presentations/1/access",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "collaboration",
+                "presentations",
+                "1",
+                "access"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Update User Presence",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer dev-test-token"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"presentationId\": 1,\n  \"isOnline\": true,\n  \"cursorPosition\": {\n    \"x\": 100,\n    \"y\": 200\n  }\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/collaboration/presence",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "collaboration",
+                "presence"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Coach Sessions",
+      "item": [
+        {
+          "name": "Create Coach Session",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer dev-test-token"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"presentation_id\": 1,\n  \"mode\": \"existing_presentation\",\n  \"language\": \"english\",\n  \"duration_minutes\": 15\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/coach-sessions",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "coach-sessions"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Get Coach Session",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer dev-test-token"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/coach-sessions/1",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "coach-sessions",
+                "1"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Add Session Config",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer dev-test-token"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"session_id\": 1,\n  \"audience_type\": \"corporate_executives\",\n  \"speech_style\": \"formal\",\n  \"technicality_level\": \"intermediate\",\n  \"slide_range_start\": 1,\n  \"slide_range_end\": 10\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/coach-sessions/1/config",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "coach-sessions",
+                "1",
+                "config"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Submit User Recording",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer dev-test-token"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"session_id\": 1,\n  \"transcript\": \"Thank you all for being here today...\",\n  \"video_duration\": 900\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/coach-sessions/1/recording",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "coach-sessions",
+                "1",
+                "recording"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Add Performance Score",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer dev-test-token"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"session_id\": 1,\n  \"metric\": \"pace\",\n  \"score\": 85\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/coach-sessions/1/scores",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "coach-sessions",
+                "1",
+                "scores"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Add Feedback Item",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer dev-test-token"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"session_id\": 1,\n  \"type\": \"improvement\",\n  \"content\": \"Try to slow down your pace on slide 3\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/coach-sessions/1/feedback",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "coach-sessions",
+                "1",
+                "feedback"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "AI Outputs",
+      "item": [
+        {
+          "name": "Get AI Output",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer dev-test-token"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/coach-sessions/1/ai-outputs",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "coach-sessions",
+                "1",
+                "ai-outputs"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Create AI Output (Speech Script)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer dev-test-token"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"session_id\": 1,\n  \"type\": \"speech_script\",\n  \"content\": \"Welcome everyone to our quarterly meeting. Today I want to discuss...\",\n  \"model_used\": \"gpt-4\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/coach-sessions/1/ai-outputs",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "coach-sessions",
+                "1",
+                "ai-outputs"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Templates",
+      "item": [
+        {
+          "name": "Get All Templates",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer dev-test-token"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/templates",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "templates"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Create Template",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer dev-test-token"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Business Pitch\",\n  \"description\": \"Professional business pitch template\",\n  \"category\": \"business\",\n  \"thumbnail_url\": \"https://example.com/thumbnail.png\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/templates",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "templates"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Apply Template to Presentation",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer dev-test-token"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"template_id\": 1\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/presentations/1/templates",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "presentations",
+                "1",
+                "templates"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Adaptive Learning",
+      "item": [
+        {
+          "name": "Get Learning Dashboard",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer dev-test-token"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/adaptive-learning/dashboard",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "adaptive-learning",
+                "dashboard"
+              ]
+            },
+            "description": "Get the complete learning dashboard for the authenticated user, including progress overview, current exercises, and milestone tracking."
+          }
+        },
+        {
+          "name": "Get Learning Profile",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer dev-test-token"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/adaptive-learning/profile",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "adaptive-learning",
+                "profile"
+              ]
+            },
+            "description": "Get the user's learning profile including learning style preferences, completed courses, and skill assessments."
+          }
+        },
+        {
+          "name": "Get Personalized Exercises",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer dev-test-token"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/adaptive-learning/exercises?includeCompleted=false",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "adaptive-learning",
+                "exercises"
+              ],
+              "query": [
+                {
+                  "key": "includeCompleted",
+                  "value": "false",
+                  "description": "Include completed exercises in response (default: false)"
+                }
+              ]
+            },
+            "description": "Get personalized exercises tailored to the user's current skill level and learning objectives. Optional query parameter to include completed exercises."
+          }
+        },
+        {
+          "name": "Complete Exercise",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer dev-test-token"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"score\": 85,\n  \"time_spent_seconds\": 120,\n  \"feedback\": \"Good attempt with room for improvement\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/adaptive-learning/exercises/1/complete",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "adaptive-learning",
+                "exercises",
+                "1",
+                "complete"
+              ]
+            },
+            "description": "Mark an exercise as complete and record the user's performance. Include score, time spent, and optional feedback."
+          }
+        },
+        {
+          "name": "Get Skill Progress",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer dev-test-token"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/adaptive-learning/skills",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "adaptive-learning",
+                "skills"
+              ]
+            },
+            "description": "Get detailed progress metrics for all skills the user is learning. Includes proficiency levels, learning curves, and recommendations."
+          }
+        },
+        {
+          "name": "Get Learning Milestones",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer dev-test-token"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/adaptive-learning/milestones",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "adaptive-learning",
+                "milestones"
+              ]
+            },
+            "description": "Get all learning milestones and achievements. Includes completed milestones, next targets, and progress towards goals."
+          }
+        },
+        {
+          "name": "Get AI Insights",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer dev-test-token"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/adaptive-learning/insights",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "adaptive-learning",
+                "insights"
+              ]
+            },
+            "description": "Get AI-generated insights about the user's learning patterns, strengths, weaknesses, and personalized recommendations for improvement."
+          }
+        }
+      ]
+    }
+  ],
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:5000",
+      "type": "string"
+    }
+  ]
+}

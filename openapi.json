@@ -1,0 +1,2102 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "SlideBanai API",
+    "description": "AI-Powered Presentation Platform with Analytics & Collaboration",
+    "version": "1.0.0",
+    "contact": {
+      "name": "SlideBanai Support",
+      "url": "https://slidebanai.com/support",
+      "email": "support@slidebanai.com"
+    },
+    "license": {
+      "name": "MIT",
+      "url": "https://opensource.org/licenses/MIT"
+    }
+  },
+  "servers": [
+    {
+      "url": "http://localhost:5000",
+      "description": "Development server"
+    },
+    {
+      "url": "https://api.slidebanai.com",
+      "description": "Production server"
+    }
+  ],
+  "components": {
+    "securitySchemes": {
+      "bearerAuth": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "JWT",
+        "description": "JWT Bearer token"
+      }
+    },
+    "schemas": {
+      "Presentation": {
+        "type": "object",
+        "required": ["id", "user_id", "title", "status"],
+        "properties": {
+          "id": {
+            "type": "integer",
+            "example": 1
+          },
+          "user_id": {
+            "type": "integer",
+            "example": 1
+          },
+          "title": {
+            "type": "string",
+            "example": "Q1 2026 Product Launch"
+          },
+          "description": {
+            "type": "string",
+            "example": "Comprehensive product launch presentation"
+          },
+          "status": {
+            "type": "string",
+            "enum": ["draft", "in_progress", "published"],
+            "example": "draft"
+          },
+          "slides_count": {
+            "type": "integer",
+            "example": 12
+          },
+          "created_at": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "updated_at": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      },
+      "CreatePresentationRequest": {
+        "type": "object",
+        "required": ["title"],
+        "properties": {
+          "title": {
+            "type": "string",
+            "example": "My Presentation"
+          },
+          "description": {
+            "type": "string",
+            "example": "A great presentation"
+          },
+          "status": {
+            "type": "string",
+            "enum": ["draft", "in_progress", "published"],
+            "example": "draft"
+          },
+          "slides_count": {
+            "type": "integer",
+            "example": 0
+          }
+        }
+      },
+      "Slide": {
+        "type": "object",
+        "required": ["id", "presentation_id", "slide_number"],
+        "properties": {
+          "id": {
+            "type": "integer"
+          },
+          "presentation_id": {
+            "type": "integer"
+          },
+          "slide_number": {
+            "type": "integer",
+            "example": 1
+          },
+          "content": {
+            "type": "string",
+            "example": "# Welcome to SlideBanai"
+          },
+          "background_color": {
+            "type": "string",
+            "example": "#FFFFFF"
+          },
+          "created_at": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "updated_at": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      },
+      "CreateSlideRequest": {
+        "type": "object",
+        "required": ["slide_number", "content"],
+        "properties": {
+          "slide_number": {
+            "type": "integer",
+            "example": 1
+          },
+          "content": {
+            "type": "string",
+            "example": "# Welcome to SlideBanai"
+          },
+          "background_color": {
+            "type": "string",
+            "example": "#FFFFFF"
+          }
+        }
+      },
+      "Collaborator": {
+        "type": "object",
+        "required": ["id", "presentation_id", "user_id", "role"],
+        "properties": {
+          "id": {
+            "type": "integer"
+          },
+          "presentation_id": {
+            "type": "integer"
+          },
+          "user_id": {
+            "type": "integer"
+          },
+          "role": {
+            "type": "string",
+            "enum": ["owner", "editor", "viewer", "commenter"],
+            "example": "editor"
+          },
+          "created_at": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      },
+      "AddCollaboratorRequest": {
+        "type": "object",
+        "required": ["userId", "role"],
+        "properties": {
+          "userId": {
+            "type": "integer",
+            "example": 2
+          },
+          "role": {
+            "type": "string",
+            "enum": ["owner", "editor", "viewer", "commenter"],
+            "example": "editor"
+          }
+        }
+      },
+      "DashboardAnalytics": {
+        "type": "object",
+        "properties": {
+          "total_users": {
+            "type": "integer",
+            "example": 150
+          },
+          "total_sessions": {
+            "type": "integer",
+            "example": 850
+          },
+          "avg_presentation_score": {
+            "type": "number",
+            "format": "float",
+            "example": 78.5
+          },
+          "presentations_created": {
+            "type": "integer",
+            "example": 320
+          },
+          "total_practice_hours": {
+            "type": "integer",
+            "example": 4200
+          },
+          "active_users_today": {
+            "type": "integer",
+            "example": 45
+          },
+          "trends": {
+            "type": "object",
+            "properties": {
+              "sessions_last_7_days": {
+                "type": "array",
+                "items": {
+                  "type": "integer"
+                }
+              },
+              "avg_scores_last_7_days": {
+                "type": "array",
+                "items": {
+                  "type": "number"
+                }
+              }
+            }
+          }
+        }
+      },
+      "CollaborationOverview": {
+        "type": "object",
+        "properties": {
+          "total_collaborations": {
+            "type": "integer"
+          },
+          "active_projects": {
+            "type": "integer"
+          },
+          "team_members": {
+            "type": "integer"
+          }
+        }
+      },
+      "CoachSession": {
+        "type": "object",
+        "required": ["id", "user_id", "presentation_id", "mode"],
+        "properties": {
+          "id": {
+            "type": "integer"
+          },
+          "user_id": {
+            "type": "integer"
+          },
+          "presentation_id": {
+            "type": "integer"
+          },
+          "mode": {
+            "type": "string",
+            "enum": ["existing_presentation", "new_topic", "free_form"],
+            "example": "existing_presentation"
+          },
+          "language": {
+            "type": "string",
+            "example": "english"
+          },
+          "duration_minutes": {
+            "type": "integer",
+            "example": 15
+          },
+          "created_at": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "updated_at": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      },
+      "CreateCoachSessionRequest": {
+        "type": "object",
+        "required": ["presentation_id", "mode"],
+        "properties": {
+          "presentation_id": {
+            "type": "integer",
+            "example": 1
+          },
+          "mode": {
+            "type": "string",
+            "enum": ["existing_presentation", "new_topic", "free_form"],
+            "example": "existing_presentation"
+          },
+          "language": {
+            "type": "string",
+            "example": "english"
+          },
+          "duration_minutes": {
+            "type": "integer",
+            "example": 15
+          }
+        }
+      },
+      "SessionConfig": {
+        "type": "object",
+        "required": ["session_id", "audience_type", "speech_style", "technicality_level"],
+        "properties": {
+          "session_id": {
+            "type": "integer"
+          },
+          "audience_type": {
+            "type": "string",
+            "enum": ["general_audience", "technical_experts", "corporate_executives", "investors", "students"],
+            "example": "corporate_executives"
+          },
+          "speech_style": {
+            "type": "string",
+            "enum": ["formal", "casual", "persuasive", "educational"],
+            "example": "formal"
+          },
+          "technicality_level": {
+            "type": "string",
+            "enum": ["beginner", "intermediate", "advanced"],
+            "example": "intermediate"
+          },
+          "slide_range_start": {
+            "type": "integer",
+            "example": 1
+          },
+          "slide_range_end": {
+            "type": "integer",
+            "example": 10
+          }
+        }
+      },
+      "UserRecording": {
+        "type": "object",
+        "required": ["session_id", "transcript", "video_duration"],
+        "properties": {
+          "session_id": {
+            "type": "integer"
+          },
+          "transcript": {
+            "type": "string",
+            "example": "Thank you all for being here today..."
+          },
+          "video_duration": {
+            "type": "integer",
+            "example": 900
+          },
+          "created_at": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      },
+      "PerformanceScore": {
+        "type": "object",
+        "required": ["session_id", "metric", "score"],
+        "properties": {
+          "session_id": {
+            "type": "integer"
+          },
+          "metric": {
+            "type": "string",
+            "enum": ["pace", "clarity", "engagement", "eye_contact", "hand_gestures", "filler_words"],
+            "example": "pace"
+          },
+          "score": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 100,
+            "example": 85
+          }
+        }
+      },
+      "FeedbackItem": {
+        "type": "object",
+        "required": ["session_id", "type", "content"],
+        "properties": {
+          "session_id": {
+            "type": "integer"
+          },
+          "type": {
+            "type": "string",
+            "enum": ["improvement", "strength", "tip"],
+            "example": "improvement"
+          },
+          "content": {
+            "type": "string",
+            "example": "Try to slow down your pace on slide 3"
+          },
+          "created_at": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      },
+      "PresentationIntegration": {
+        "type": "object",
+        "required": ["id", "presentation_id", "provider", "external_id"],
+        "properties": {
+          "id": {
+            "type": "integer"
+          },
+          "presentation_id": {
+            "type": "integer"
+          },
+          "provider": {
+            "type": "string",
+            "enum": ["google_slides", "canva"],
+            "example": "google_slides"
+          },
+          "external_id": {
+            "type": "string",
+            "example": "1BxiMVs0XRA5nFMwSxQSFZwCW_8NrWrb6how-SVndUX8"
+          },
+          "edit_url": {
+            "type": "string",
+            "format": "uri"
+          },
+          "view_url": {
+            "type": "string",
+            "format": "uri"
+          },
+          "thumbnail_url": {
+            "type": "string",
+            "format": "uri"
+          },
+          "created_at": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      },
+      "CreateIntegrationRequest": {
+        "type": "object",
+        "required": ["provider", "external_id"],
+        "properties": {
+          "provider": {
+            "type": "string",
+            "enum": ["google_slides", "canva"],
+            "example": "google_slides"
+          },
+          "external_id": {
+            "type": "string",
+            "example": "1BxiMVs0XRA5nFMwSxQSFZwCW_8NrWrb6how-SVndUX8"
+          },
+          "edit_url": {
+            "type": "string",
+            "format": "uri"
+          },
+          "view_url": {
+            "type": "string",
+            "format": "uri"
+          },
+          "thumbnail_url": {
+            "type": "string",
+            "format": "uri"
+          }
+        }
+      },
+      "Template": {
+        "type": "object",
+        "required": ["id", "name", "category"],
+        "properties": {
+          "id": {
+            "type": "integer"
+          },
+          "name": {
+            "type": "string",
+            "example": "Business Pitch"
+          },
+          "description": {
+            "type": "string",
+            "example": "Professional business pitch template"
+          },
+          "category": {
+            "type": "string",
+            "example": "business"
+          },
+          "thumbnail_url": {
+            "type": "string",
+            "format": "uri"
+          },
+          "created_at": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      },
+      "AIOutput": {
+        "type": "object",
+        "required": ["id", "session_id", "type", "content"],
+        "properties": {
+          "id": {
+            "type": "integer"
+          },
+          "session_id": {
+            "type": "integer"
+          },
+          "type": {
+            "type": "string",
+            "enum": ["speech_script", "feedback_summary", "improvement_plan"],
+            "example": "speech_script"
+          },
+          "content": {
+            "type": "string"
+          },
+          "model_used": {
+            "type": "string",
+            "example": "gpt-4"
+          },
+          "created_at": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      },
+      "Error": {
+        "type": "object",
+        "required": ["error", "status"],
+        "properties": {
+          "error": {
+            "type": "string"
+          },
+          "code": {
+            "type": "string"
+          },
+          "status": {
+            "type": "integer"
+          },
+          "timestamp": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      },
+      "LearningDashboard": {
+        "type": "object",
+        "properties": {
+          "user_id": {"type": "integer"},
+          "total_exercises_completed": {"type": "integer"},
+          "current_streak": {"type": "integer"},
+          "total_learning_hours": {"type": "number"},
+          "skill_level": {"type": "string", "enum": ["beginner", "intermediate", "advanced", "expert"]},
+          "next_exercise": {"$ref": "#/components/schemas/Exercise"},
+          "recent_milestones": {
+            "type": "array",
+            "items": {"$ref": "#/components/schemas/Milestone"}
+          }
+        }
+      },
+      "LearningProfile": {
+        "type": "object",
+        "properties": {
+          "user_id": {"type": "integer"},
+          "learning_style": {"type": "string"},
+          "preferred_difficulty": {"type": "string"},
+          "completed_courses": {"type": "array", "items": {"type": "string"}},
+          "skill_assessments": {
+            "type": "array",
+            "items": {"$ref": "#/components/schemas/SkillProgress"}
+          },
+          "created_at": {"type": "string", "format": "date-time"},
+          "updated_at": {"type": "string", "format": "date-time"}
+        }
+      },
+      "Exercise": {
+        "type": "object",
+        "properties": {
+          "id": {"type": "integer"},
+          "title": {"type": "string"},
+          "description": {"type": "string"},
+          "difficulty": {"type": "string", "enum": ["easy", "medium", "hard"]},
+          "estimated_time_minutes": {"type": "integer"},
+          "topic": {"type": "string"},
+          "is_completed": {"type": "boolean"},
+          "completion_percentage": {"type": "number"},
+          "estimated_points": {"type": "integer"}
+        }
+      },
+      "ExerciseCompletion": {
+        "type": "object",
+        "properties": {
+          "exercise_id": {"type": "integer"},
+          "score": {"type": "number"},
+          "time_spent_seconds": {"type": "integer"},
+          "points_earned": {"type": "integer"},
+          "feedback": {"type": "string"},
+          "completed_at": {"type": "string", "format": "date-time"}
+        }
+      },
+      "SkillProgress": {
+        "type": "object",
+        "properties": {
+          "skill_id": {"type": "integer"},
+          "skill_name": {"type": "string"},
+          "proficiency_level": {"type": "string", "enum": ["novice", "beginner", "intermediate", "advanced", "expert"]},
+          "progress_percentage": {"type": "number"},
+          "exercises_completed": {"type": "integer"},
+          "total_exercises": {"type": "integer"},
+          "last_practiced": {"type": "string", "format": "date-time"}
+        }
+      },
+      "Milestone": {
+        "type": "object",
+        "properties": {
+          "id": {"type": "integer"},
+          "title": {"type": "string"},
+          "description": {"type": "string"},
+          "is_completed": {"type": "boolean"},
+          "completion_date": {"type": "string", "format": "date-time"},
+          "required_exercises": {"type": "integer"},
+          "exercises_completed": {"type": "integer"}
+        }
+      },
+      "AIInsights": {
+        "type": "object",
+        "properties": {
+          "user_id": {"type": "integer"},
+          "strengths": {
+            "type": "array",
+            "items": {"type": "string"}
+          },
+          "weaknesses": {
+            "type": "array",
+            "items": {"type": "string"}
+          },
+          "recommendations": {
+            "type": "array",
+            "items": {"type": "string"}
+          },
+          "learning_pace": {"type": "string"},
+          "estimated_time_to_mastery": {"type": "string"},
+          "generated_at": {"type": "string", "format": "date-time"}
+        }
+      }
+    }
+  },
+  "security": [
+    {
+      "bearerAuth": []
+    }
+  ],
+  "paths": {
+    "/presentations": {
+      "get": {
+        "tags": ["Presentations"],
+        "summary": "List all presentations",
+        "operationId": "listPresentations",
+        "parameters": [
+          {
+            "name": "page",
+            "in": "query",
+            "description": "Page number",
+            "schema": {
+              "type": "integer",
+              "default": 1
+            }
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "description": "Results per page",
+            "schema": {
+              "type": "integer",
+              "default": 20,
+              "maximum": 100
+            }
+          },
+          {
+            "name": "status",
+            "in": "query",
+            "description": "Filter by status",
+            "schema": {
+              "type": "string",
+              "enum": ["draft", "in_progress", "published"]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "List of presentations",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Presentation"
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": ["Presentations"],
+        "summary": "Create a new presentation",
+        "operationId": "createPresentation",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreatePresentationRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Presentation created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Presentation"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        }
+      }
+    },
+    "/presentations/{id}": {
+      "get": {
+        "tags": ["Presentations"],
+        "summary": "Get presentation by ID",
+        "operationId": "getPresentation",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "description": "Presentation ID",
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Presentation details",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Presentation"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Presentation not found"
+          }
+        }
+      },
+      "put": {
+        "tags": ["Presentations"],
+        "summary": "Update presentation",
+        "operationId": "updatePresentation",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "description": "Presentation ID",
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreatePresentationRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Presentation updated",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Presentation"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Presentation not found"
+          }
+        }
+      },
+      "delete": {
+        "tags": ["Presentations"],
+        "summary": "Delete presentation",
+        "operationId": "deletePresentation",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "description": "Presentation ID",
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Presentation deleted"
+          },
+          "404": {
+            "description": "Presentation not found"
+          }
+        }
+      }
+    },
+    "/presentations/{presentationId}/slides": {
+      "get": {
+        "tags": ["Slides"],
+        "summary": "Get all slides for a presentation",
+        "operationId": "listSlides",
+        "parameters": [
+          {
+            "name": "presentationId",
+            "in": "path",
+            "required": true,
+            "description": "Presentation ID",
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "List of slides",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Slide"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": ["Slides"],
+        "summary": "Create a new slide",
+        "operationId": "createSlide",
+        "parameters": [
+          {
+            "name": "presentationId",
+            "in": "path",
+            "required": true,
+            "description": "Presentation ID",
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateSlideRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Slide created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Slide"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/presentations/{presentationId}/slides/{slideId}": {
+      "get": {
+        "tags": ["Slides"],
+        "summary": "Get a specific slide",
+        "operationId": "getSlide",
+        "parameters": [
+          {
+            "name": "presentationId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "slideId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Slide details",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Slide"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Slide not found"
+          }
+        }
+      },
+      "put": {
+        "tags": ["Slides"],
+        "summary": "Update a slide",
+        "operationId": "updateSlide",
+        "parameters": [
+          {
+            "name": "presentationId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "slideId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateSlideRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Slide updated",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Slide"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": ["Slides"],
+        "summary": "Delete a slide",
+        "operationId": "deleteSlide",
+        "parameters": [
+          {
+            "name": "presentationId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "slideId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Slide deleted"
+          }
+        }
+      }
+    },
+    "/presentations/{presentationId}/integrations": {
+      "get": {
+        "tags": ["Integrations"],
+        "summary": "Get presentation integrations",
+        "operationId": "getIntegrations",
+        "parameters": [
+          {
+            "name": "presentationId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Integration details",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PresentationIntegration"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": ["Integrations"],
+        "summary": "Create integration",
+        "operationId": "createIntegration",
+        "parameters": [
+          {
+            "name": "presentationId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateIntegrationRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Integration created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PresentationIntegration"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/collaboration/{presentationId}": {
+      "get": {
+        "tags": ["Collaborators"],
+        "summary": "Get all collaborators",
+        "operationId": "getCollaborators",
+        "parameters": [
+          {
+            "name": "presentationId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "List of collaborators",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Collaborator"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": ["Collaborators"],
+        "summary": "Add collaborator",
+        "operationId": "addCollaborator",
+        "parameters": [
+          {
+            "name": "presentationId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AddCollaboratorRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Collaborator added",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Collaborator"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/collaboration/{presentationId}/{userId}": {
+      "patch": {
+        "tags": ["Collaborators"],
+        "summary": "Update collaborator role",
+        "operationId": "updateCollaborator",
+        "parameters": [
+          {
+            "name": "presentationId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "userId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "role": {
+                    "type": "string",
+                    "enum": ["owner", "editor", "viewer", "commenter"]
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Collaborator updated",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Collaborator"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": ["Collaborators"],
+        "summary": "Remove collaborator",
+        "operationId": "removeCollaborator",
+        "parameters": [
+          {
+            "name": "presentationId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "userId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Collaborator removed"
+          }
+        }
+      }
+    },
+    "/api/analytics/dashboard": {
+      "get": {
+        "tags": ["Analytics"],
+        "summary": "Get dashboard analytics",
+        "operationId": "getDashboardAnalytics",
+        "responses": {
+          "200": {
+            "description": "Dashboard analytics",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DashboardAnalytics"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/analytics/presentation/{presentationId}": {
+      "get": {
+        "tags": ["Analytics"],
+        "summary": "Get presentation analytics",
+        "operationId": "getPresentationAnalytics",
+        "parameters": [
+          {
+            "name": "presentationId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Presentation analytics"
+          }
+        }
+      }
+    },
+    "/api/collaboration/overview": {
+      "get": {
+        "tags": ["Collaboration Features"],
+        "summary": "Get collaboration overview",
+        "operationId": "getCollaborationOverview",
+        "responses": {
+          "200": {
+            "description": "Collaboration overview",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CollaborationOverview"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/collaboration/stats": {
+      "get": {
+        "tags": ["Collaboration Features"],
+        "summary": "Get collaboration statistics",
+        "operationId": "getCollaborationStats",
+        "responses": {
+          "200": {
+            "description": "Collaboration statistics"
+          }
+        }
+      }
+    },
+    "/api/collaboration/recent": {
+      "get": {
+        "tags": ["Collaboration Features"],
+        "summary": "Get recent collaborations",
+        "operationId": "getRecentCollaborations",
+        "parameters": [
+          {
+            "name": "limit",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "default": 10
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Recent collaborations"
+          }
+        }
+      }
+    },
+    "/api/collaboration/suggestions": {
+      "get": {
+        "tags": ["Collaboration Features"],
+        "summary": "Get collaboration suggestions",
+        "operationId": "getCollaborationSuggestions",
+        "responses": {
+          "200": {
+            "description": "Collaboration suggestions"
+          }
+        }
+      }
+    },
+    "/api/collaboration/presentations/{presentationId}/active": {
+      "get": {
+        "tags": ["Collaboration Features"],
+        "summary": "Get active collaborators",
+        "operationId": "getActiveCollaborators",
+        "parameters": [
+          {
+            "name": "presentationId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Active collaborators"
+          }
+        }
+      }
+    },
+    "/api/collaboration/presentations/{presentationId}/timeline": {
+      "get": {
+        "tags": ["Collaboration Features"],
+        "summary": "Get collaboration timeline",
+        "operationId": "getCollaborationTimeline",
+        "parameters": [
+          {
+            "name": "presentationId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "hours",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "default": 24
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Collaboration timeline"
+          }
+        }
+      }
+    },
+    "/api/collaboration/presentations/{presentationId}/access": {
+      "get": {
+        "tags": ["Collaboration Features"],
+        "summary": "Check presentation access",
+        "operationId": "checkPresentationAccess",
+        "parameters": [
+          {
+            "name": "presentationId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Access check result"
+          }
+        }
+      }
+    },
+    "/api/collaboration/presence": {
+      "post": {
+        "tags": ["Collaboration Features"],
+        "summary": "Update user presence",
+        "operationId": "updateUserPresence",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "presentationId": {
+                    "type": "integer"
+                  },
+                  "isOnline": {
+                    "type": "boolean"
+                  },
+                  "cursorPosition": {
+                    "type": "object",
+                    "properties": {
+                      "x": {
+                        "type": "number"
+                      },
+                      "y": {
+                        "type": "number"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Presence updated"
+          }
+        }
+      }
+    },
+    "/coach-sessions": {
+      "post": {
+        "tags": ["Coach Sessions"],
+        "summary": "Create coach session",
+        "operationId": "createCoachSession",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateCoachSessionRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Coach session created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CoachSession"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/coach-sessions/{sessionId}": {
+      "get": {
+        "tags": ["Coach Sessions"],
+        "summary": "Get coach session",
+        "operationId": "getCoachSession",
+        "parameters": [
+          {
+            "name": "sessionId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Coach session details",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CoachSession"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/coach-sessions/{sessionId}/config": {
+      "post": {
+        "tags": ["Coach Sessions"],
+        "summary": "Add session configuration",
+        "operationId": "addSessionConfig",
+        "parameters": [
+          {
+            "name": "sessionId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SessionConfig"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Configuration added",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SessionConfig"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/coach-sessions/{sessionId}/recording": {
+      "post": {
+        "tags": ["Coach Sessions"],
+        "summary": "Submit user recording",
+        "operationId": "submitRecording",
+        "parameters": [
+          {
+            "name": "sessionId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UserRecording"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Recording submitted",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserRecording"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/coach-sessions/{sessionId}/scores": {
+      "post": {
+        "tags": ["Coach Sessions"],
+        "summary": "Add performance score",
+        "operationId": "addPerformanceScore",
+        "parameters": [
+          {
+            "name": "sessionId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PerformanceScore"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Score added",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PerformanceScore"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/coach-sessions/{sessionId}/feedback": {
+      "post": {
+        "tags": ["Coach Sessions"],
+        "summary": "Add feedback item",
+        "operationId": "addFeedback",
+        "parameters": [
+          {
+            "name": "sessionId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/FeedbackItem"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Feedback added",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/FeedbackItem"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/coach-sessions/{sessionId}/ai-outputs": {
+      "get": {
+        "tags": ["AI Outputs"],
+        "summary": "Get AI outputs",
+        "operationId": "getAIOutputs",
+        "parameters": [
+          {
+            "name": "sessionId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "AI outputs",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/AIOutput"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": ["AI Outputs"],
+        "summary": "Create AI output",
+        "operationId": "createAIOutput",
+        "parameters": [
+          {
+            "name": "sessionId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AIOutput"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "AI output created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AIOutput"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/templates": {
+      "get": {
+        "tags": ["Templates"],
+        "summary": "Get all templates",
+        "operationId": "listTemplates",
+        "responses": {
+          "200": {
+            "description": "List of templates",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Template"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": ["Templates"],
+        "summary": "Create template",
+        "operationId": "createTemplate",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Template"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Template created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Template"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/presentations/{presentationId}/templates": {
+      "post": {
+        "tags": ["Templates"],
+        "summary": "Apply template to presentation",
+        "operationId": "applyTemplate",
+        "parameters": [
+          {
+            "name": "presentationId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "template_id": {
+                    "type": "integer"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Template applied"
+          }
+        }
+      }
+    },
+    "/api/adaptive-learning/dashboard": {
+      "get": {
+        "tags": ["Adaptive Learning"],
+        "summary": "Get learning dashboard",
+        "operationId": "getLearningDashboard",
+        "security": [{"bearerAuth": []}],
+        "responses": {
+          "200": {
+            "description": "Learning dashboard retrieved successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {"type": "boolean"},
+                    "data": {
+                      "$ref": "#/components/schemas/LearningDashboard"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        }
+      }
+    },
+    "/api/adaptive-learning/profile": {
+      "get": {
+        "tags": ["Adaptive Learning"],
+        "summary": "Get learning profile",
+        "operationId": "getLearningProfile",
+        "security": [{"bearerAuth": []}],
+        "responses": {
+          "200": {
+            "description": "Learning profile retrieved successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {"type": "boolean"},
+                    "data": {
+                      "$ref": "#/components/schemas/LearningProfile"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        }
+      }
+    },
+    "/api/adaptive-learning/exercises": {
+      "get": {
+        "tags": ["Adaptive Learning"],
+        "summary": "Get personalized exercises",
+        "operationId": "getPersonalizedExercises",
+        "security": [{"bearerAuth": []}],
+        "parameters": [
+          {
+            "name": "includeCompleted",
+            "in": "query",
+            "schema": {
+              "type": "boolean",
+              "default": false
+            },
+            "description": "Include completed exercises in response"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Personalized exercises retrieved successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {"type": "boolean"},
+                    "data": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/Exercise"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        }
+      }
+    },
+    "/api/adaptive-learning/exercises/{exerciseId}/complete": {
+      "post": {
+        "tags": ["Adaptive Learning"],
+        "summary": "Complete an exercise",
+        "operationId": "completeExercise",
+        "security": [{"bearerAuth": []}],
+        "parameters": [
+          {
+            "name": "exerciseId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "score": {
+                    "type": "number",
+                    "description": "User's score on the exercise"
+                  },
+                  "time_spent_seconds": {
+                    "type": "integer",
+                    "description": "Time spent on exercise in seconds"
+                  },
+                  "feedback": {
+                    "type": "string",
+                    "description": "Optional feedback on performance"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Exercise completed successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {"type": "boolean"},
+                    "data": {
+                      "$ref": "#/components/schemas/ExerciseCompletion"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "404": {
+            "description": "Exercise not found"
+          }
+        }
+      }
+    },
+    "/api/adaptive-learning/skills": {
+      "get": {
+        "tags": ["Adaptive Learning"],
+        "summary": "Get skill progress",
+        "operationId": "getSkillProgress",
+        "security": [{"bearerAuth": []}],
+        "responses": {
+          "200": {
+            "description": "Skill progress retrieved successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {"type": "boolean"},
+                    "data": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/SkillProgress"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        }
+      }
+    },
+    "/api/adaptive-learning/milestones": {
+      "get": {
+        "tags": ["Adaptive Learning"],
+        "summary": "Get learning milestones",
+        "operationId": "getLearningMilestones",
+        "security": [{"bearerAuth": []}],
+        "responses": {
+          "200": {
+            "description": "Learning milestones retrieved successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {"type": "boolean"},
+                    "data": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/Milestone"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        }
+      }
+    },
+    "/api/adaptive-learning/insights": {
+      "get": {
+        "tags": ["Adaptive Learning"],
+        "summary": "Get AI insights",
+        "operationId": "getInsights",
+        "security": [{"bearerAuth": []}],
+        "responses": {
+          "200": {
+            "description": "AI insights retrieved successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {"type": "boolean"},
+                    "data": {
+                      "$ref": "#/components/schemas/AIInsights"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        }
+      }
+    }
+  }
+}

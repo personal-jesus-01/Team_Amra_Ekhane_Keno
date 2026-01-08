@@ -15,7 +15,9 @@ import {
   FileSearch,
   Menu,
   X,
-  Presentation
+  Presentation,
+  BarChart3,
+  Share2
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
@@ -37,6 +39,16 @@ export default function Sidebar() {
       name: "My Presentations",
       href: "/presentations",
       icon: FileText,
+    },
+    {
+      name: "Analytics",
+      href: "/analytics",
+      icon: BarChart3,
+    },
+    {
+      name: "Collaboration",
+      href: "/collaboration",
+      icon: Share2,
     },
     {
       name: "Presentation Coach",
