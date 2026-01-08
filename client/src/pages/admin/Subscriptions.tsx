@@ -35,10 +35,19 @@ const planIcons: Record<string, any> = {
 };
 
 export default function Subscriptions() {
-  const [editingPlan, setEditingPlan] = useState<typeof subscriptionPlans[0] | null>(null);
-
+  const [newPlan, setNewPlan] = useState({ name: '', price: '', aiCredits: '', ocrPages: '', storage: '', features: '' });
   const totalSubscribers = subscriptionPlans.reduce((acc, plan) => acc + plan.active, 0);
   const monthlyRevenue = subscriptionPlans.reduce((acc, plan) => acc + (plan.price * plan.active), 0);
+
+  const handleCreatePlan = () => {
+    if (newPlan.name && newPlan.price && newPlan.aiCredits && newPlan.ocrPages && newPlan.storage) {
+      // TODO: Call API to create subscription plan
+      alert('Create subscription plan API endpoint not yet implemented. This will be added soon.');
+      setNewPlan({ name: '', price: '', aiCredits: '', ocrPages: '', storage: '', features: '' });
+    } else {
+      alert('Please fill all required fields');
+    }
+  };
 
   return (
     <AdminLayout title="Subscription Management" subtitle="Manage subscription plans and active subscriptions">
@@ -86,33 +95,78 @@ export default function Subscriptions() {
               <div className="space-y-4 mt-4">
                 <div className="grid grid-cols-2 gap-4">
                   <div>
-                    <Label>Plan Name</Label>
-                    <Input placeholder="e.g., Premium" className="mt-1.5" />
+                    <Label htmlFor="plan-name">Plan Name</Label>
+                    <Input 
+                      id="plan-name"
+                      placeholder="e.g., Premium" 
+                      className="mt-1.5"
+                      value={newPlan.name}
+                      onChange={(e) => setNewPlan({ ...newPlan, name: e.target.value })}
+                    />
                   </div>
                   <div>
-                    <Label>Price (BDT)</Label>
-                    <Input type="number" placeholder="499" className="mt-1.5" />
+                    <Label htmlFor="plan-price">Price (BDT)</Label>
+                    <Input 
+                      id="plan-price"
+                      type="number" 
+                      placeholder="499" 
+                      className="mt-1.5"
+                      value={newPlan.price}
+                      onChange={(e) => setNewPlan({ ...newPlan, price: e.target.value })}
+                    />
                   </div>
                 </div>
                 <div className="grid grid-cols-2 gap-4">
                   <div>
-                    <Label>AI Credits / Month</Label>
-                    <Input type="number" placeholder="500" className="mt-1.5" />
+                    <Label htmlFor="plan-ai-credits">AI Credits / Month</Label>
+                    <Input 
+                      id="plan-ai-credits"
+                      type="number" 
+                      placeholder="500" 
+                      className="mt-1.5"
+                      value={newPlan.aiCredits}
+                      onChange={(e) => setNewPlan({ ...newPlan, aiCredits: e.target.value })}
+                    />
                   </div>
                   <div>
-                    <Label>OCR Pages / Month</Label>
-                    <Input type="number" placeholder="200" className="mt-1.5" />
+                    <Label htmlFor="plan-ocr-pages">OCR Pages / Month</Label>
+                    <Input 
+                      id="plan-ocr-pages"
+                      type="number" 
+                      placeholder="200" 
+                      className="mt-1.5"
+                      value={newPlan.ocrPages}
+                      onChange={(e) => setNewPlan({ ...newPlan, ocrPages: e.target.value })}
+                    />
                   </div>
                 </div>
                 <div>
-                  <Label>Storage Limit</Label>
-                  <Input placeholder="e.g., 10GB" className="mt-1.5" />
+                  <Label htmlFor="plan-storage">Storage Limit</Label>
+                  <Input 
+                    id="plan-storage"
+                    placeholder="e.g., 10GB" 
+                    className="mt-1.5"
+                    value={newPlan.storage}
+                    onChange={(e) => setNewPlan({ ...newPlan, storage: e.target.value })}
+                  />
                 </div>
                 <div>
-                  <Label>Features (one per line)</Label>
-                  <Textarea placeholder="Advanced OCR&#10;Premium slides&#10;Priority support" className="mt-1.5" rows={4} />
+                  <Label htmlFor="plan-features">Features (one per line)</Label>
+                  <Textarea 
+                    id="plan-features"
+                    placeholder="Advanced OCR&#10;Premium slides&#10;Priority support" 
+                    className="mt-1.5" 
+                    rows={4}
+                    value={newPlan.features}
+                    onChange={(e) => setNewPlan({ ...newPlan, features: e.target.value })}
+                  />
                 </div>
-                <Button className="w-full bg-primary hover:bg-primary/90">Create Plan</Button>
+                <Button 
+                  className="w-full bg-primary hover:bg-primary/90"
+                  onClick={handleCreatePlan}
+                >
+                  Create Plan
+                </Button>
               </div>
             </DialogContent>
           </Dialog>
