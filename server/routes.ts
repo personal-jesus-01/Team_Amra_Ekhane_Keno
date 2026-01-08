@@ -1,5 +1,6 @@
 import type { Express } from "express";
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
 import { createServer, type Server } from "http";
 import express from "express";
 import { storage } from "./storage";
@@ -167,6 +168,15 @@ import { setupAuth } from "./auth";
 import { db } from "./db";
 import { WebSocketServer } from 'ws';
 
+=======
+import type { Server } from "http";
+import { registerAllRoutes } from "./routes/index";
+
+import { setupAuth } from "./auth";
+import { db } from "./db";
+import { WebSocketServer } from 'ws';
+
+>>>>>>> Stashed changes
 /**
  * Register all routes and create the server
  * Main entry point from server/index.ts
@@ -179,5 +189,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
   setupAuth(app);
   // Use our centralized route registration
   return registerAllRoutes(app);
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
 }
