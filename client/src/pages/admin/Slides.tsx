@@ -32,14 +32,28 @@ import {
   CheckCircle,
   AlertCircle,
 } from 'lucide-react';
-import { slides, dashboardStats } from '@/lib/mockData';
+import { slides as mockSlides, dashboardStats } from '@/lib/mockData';
+import { usePresentations } from '@/hooks/useApi';
 
 export default function Slides() {
   const [sourceFilter, setSourceFilter] = useState<string>('all');
   const [statusFilter, setStatusFilter] = useState<string>('all');
-  const [selectedSlide, setSelectedSlide] = useState<typeof slides[0] | null>(null);
+  const [selectedSlide, setSelectedSlide] = useState<any | null>(null);
+  const { data: presentations = [] } = usePresentations();
 
-  const filteredSlides = slides.filter((slide) => {
+  // Transform presentations into slide-like objects for display
+  const displaySlides = presentations.length > 0 ? presentations.map((p: any) => ({
+    id: p.id,
+    title: p.title,
+    user: 'System',
+    slides: p.slides_count || 0,
+    source: 'Presentation',
+    quality: 85,
+    status: p.status || 'draft',
+    createdAt: p.created_at ? new Date(p.created_at).toLocaleDateString() : '',
+  })) : mockSlides;
+
+  const filteredSlides = displaySlides.filter((slide: any) => {
     if (sourceFilter !== 'all' && slide.source !== sourceFilter) return false;
     if (statusFilter !== 'all' && slide.status !== statusFilter) return false;
     return true;
@@ -55,7 +69,7 @@ export default function Slides() {
     {
       key: 'title',
       header: 'Presentation',
-      render: (slide: typeof slides[0]) => {
+      render: (slide: any) => {
         const Icon = sourceIcons[slide.source] || FileText;
         return (
           <div className="flex items-center gap-3">
@@ -76,21 +90,21 @@ export default function Slides() {
     {
       key: 'user',
       header: 'Created By',
-      render: (slide: typeof slides[0]) => (
+      render: (slide: any) => (
         <span className="text-sm">{slide.user}</span>
       ),
     },
     {
       key: 'slides',
       header: 'Slides',
-      render: (slide: typeof slides[0]) => (
+      render: (slide: any) => (
         <span className="font-heading text-sm">{slide.slides}</span>
       ),
     },
     {
       key: 'quality',
       header: 'Quality Score',
-      render: (slide: typeof slides[0]) => (
+      render: (slide: any) => (
         <div className="flex items-center gap-2">
           <Progress value={slide.quality} className="w-16 h-2" />
           <span className={`font-heading text-sm ${
@@ -107,12 +121,12 @@ export default function Slides() {
     {
       key: 'status',
       header: 'Status',
-      render: (slide: typeof slides[0]) => <StatusBadge status={slide.status as any} />,
+      render: (slide: any) => <StatusBadge status={slide.status as any} />,
     },
     {
       key: 'createdAt',
       header: 'Created',
-      render: (slide: typeof slides[0]) => (
+      render: (slide: any) => (
         <span className="text-sm text-muted-foreground">{slide.createdAt}</span>
       ),
     },
@@ -120,7 +134,7 @@ export default function Slides() {
       key: 'actions',
       header: '',
       className: 'w-24',
-      render: (slide: typeof slides[0]) => (
+      render: (slide: any) => (
         <div className="flex items-center gap-1">
           <Dialog>
             <DialogTrigger asChild>

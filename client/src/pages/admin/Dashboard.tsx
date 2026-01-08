@@ -1,9 +1,20 @@
+import { useState } from 'react';
 import { AdminLayout } from '@/components/admin/AdminLayout';
 import { StatCard } from '@/components/admin/StatCard';
 import { StatusBadge } from '@/components/admin/StatusBadge';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Progress } from '@/components/ui/progress';
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from '@/components/ui/dialog';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { Textarea } from '@/components/ui/textarea';
 import {
   Users,
   CreditCard,
@@ -22,11 +33,11 @@ import {
   Activity,
   ArrowUpRight,
   Plus,
-  RefreshCw,
   Download,
 } from 'lucide-react';
 import { dashboardStats, recentActivities, systemHealth, revenueData } from '@/lib/mockData';
 import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, BarChart, Bar } from 'recharts';
+import { useUsers, usePresentations, useCreateUser } from '@/hooks/useApi';
 
 const activityIcons: Record<string, any> = {
   'user-plus': UserPlus,
@@ -38,33 +49,122 @@ const activityIcons: Record<string, any> = {
 };
 
 export default function Dashboard() {
+  const { data: dbUsers = [] } = useUsers();
+  const { data: dbPresentations = [] } = usePresentations();
+  const { mutate: createUser, isPending: isCreatingUser } = useCreateUser();
+
+  const [showAddUserDialog, setShowAddUserDialog] = useState(false);
+  const [showCreatePlanDialog, setShowCreatePlanDialog] = useState(false);
+  const [newUserData, setNewUserData] = useState({ name: '', email: '', username: '' });
+  const [newPlan, setNewPlan] = useState({ name: '', price: '', aiCredits: '', ocrPages: '', storage: '', features: '' });
+
+  // Use real data when available, fallback to mock
+  const stats = {
+    totalUsers: dbUsers.length || dashboardStats.totalUsers,
+    activeSubscriptions: Math.floor((dbUsers.length || 0) * 0.6),
+    slidesToday: dbPresentations.reduce((sum: number, p: any) => sum + (p.slides_count || 0), 0) || dashboardStats.slidesToday,
+    aiCreditsConsumed: dashboardStats.aiCreditsConsumed,
+    monthlyRevenue: dashboardStats.monthlyRevenue,
+  };
+
+  const handleAddUser = () => {
+    if (newUserData.name && newUserData.email && newUserData.username) {
+      createUser(newUserData, {
+        onSuccess: () => {
+          setShowAddUserDialog(false);
+          setNewUserData({ name: '', email: '', username: '' });
+        },
+        onError: (error) => {
+          alert('Failed to create user: ' + (error as any).message);
+        },
+      });
+    } else {
+      alert('Please fill all fields');
+    }
+  };
+
+  const handleExportRevenue = () => {
+    const csvContent = [
+      ['Month', 'Revenue'].join(','),
+      ...revenueData.map(row => [row.month, row.revenue].join(',')),
+    ].join('\n');
+
+    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+    const link = document.createElement('a');
+    const url = URL.createObjectURL(blob);
+    link.setAttribute('href', url);
+    link.setAttribute('download', 'revenue-report.csv');
+    link.style.visibility = 'hidden';
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
+
+  const handleGenerateReports = () => {
+    const reportData = [
+      ['Dashboard Report'],
+      [],
+      ['Statistics'],
+      ['Metric', 'Value'],
+      ['Total Users', stats.totalUsers],
+      ['Active Subscriptions', stats.activeSubscriptions],
+      ['Slides Created Today', stats.slidesToday],
+      ['AI Credits Consumed', stats.aiCreditsConsumed],
+      ['Monthly Revenue', `৳${stats.monthlyRevenue}`],
+      [],
+      ['Revenue Data'],
+      ['Month', 'Revenue'],
+      ...revenueData.map(row => [row.month, row.revenue]),
+    ].map(row => Array.isArray(row) ? row.join(',') : row).join('\n');
+
+    const blob = new Blob([reportData], { type: 'text/csv;charset=utf-8;' });
+    const link = document.createElement('a');
+    const url = URL.createObjectURL(blob);
+    link.setAttribute('href', url);
+    link.setAttribute('download', 'dashboard-report.csv');
+    link.style.visibility = 'hidden';
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
+
+  const handleCreatePlan = () => {
+    if (newPlan.name && newPlan.price && newPlan.aiCredits && newPlan.ocrPages && newPlan.storage) {
+      alert('Subscription plan creation API endpoint not yet implemented. This will be added soon.');
+      setShowCreatePlanDialog(false);
+      setNewPlan({ name: '', price: '', aiCredits: '', ocrPages: '', storage: '', features: '' });
+    } else {
+      alert('Please fill all required fields');
+    }
+  };
+
   return (
     <AdminLayout title="Dashboard" subtitle="Welcome back, Super Admin">
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
         <StatCard
           title="Total Users"
-          value={dashboardStats.totalUsers.toLocaleString()}
+          value={stats.totalUsers.toLocaleString()}
           icon={<Users className="h-6 w-6" />}
           change={{ value: 12.5, positive: true }}
           testId="stat-total-users"
         />
         <StatCard
           title="Active Subscriptions"
-          value={dashboardStats.activeSubscriptions.toLocaleString()}
+          value={stats.activeSubscriptions.toLocaleString()}
           icon={<CreditCard className="h-6 w-6" />}
           change={{ value: 8.2, positive: true }}
           testId="stat-subscriptions"
         />
         <StatCard
           title="Slides Today"
-          value={dashboardStats.slidesToday.toLocaleString()}
+          value={stats.slidesToday.toLocaleString()}
           icon={<Presentation className="h-6 w-6" />}
           change={{ value: 23.1, positive: true }}
           testId="stat-slides-today"
         />
         <StatCard
           title="AI Credits Used"
-          value={(dashboardStats.aiCreditsConsumed / 1000).toFixed(1) + 'K'}
+          value={(stats.aiCreditsConsumed / 1000).toFixed(1) + 'K'}
           icon={<Brain className="h-6 w-6" />}
           change={{ value: 5.4, positive: false }}
           testId="stat-ai-credits"
@@ -75,7 +175,7 @@ export default function Dashboard() {
         <Card className="lg:col-span-2 border-border/50">
           <CardHeader className="flex flex-row items-center justify-between pb-2">
             <CardTitle className="font-heading text-lg">Revenue Overview</CardTitle>
-            <Button variant="outline" size="sm">
+            <Button variant="outline" size="sm" onClick={handleExportRevenue} data-testid="button-export-revenue">
               <Download className="h-4 w-4 mr-2" />
               Export
             </Button>
@@ -83,7 +183,7 @@ export default function Dashboard() {
           <CardContent>
             <div className="flex items-center gap-6 mb-4">
               <div>
-                <p className="text-3xl font-heading font-bold">৳{(dashboardStats.monthlyRevenue / 1000).toFixed(0)}K</p>
+                <p className="text-3xl font-heading font-bold">৳{(stats.monthlyRevenue / 1000).toFixed(0)}K</p>
                 <p className="text-sm text-muted-foreground">This Month</p>
               </div>
               <div className="flex items-center gap-1 text-emerald-500">
@@ -130,25 +230,142 @@ export default function Dashboard() {
             <CardTitle className="font-heading text-lg">Quick Actions</CardTitle>
           </CardHeader>
           <CardContent className="space-y-3">
-            <Button className="w-full justify-start gap-3" variant="outline" data-testid="button-add-user">
-              <Plus className="h-4 w-4" />
-              Add New User
-            </Button>
-            <Button className="w-full justify-start gap-3" variant="outline" data-testid="button-create-plan">
-              <CreditCard className="h-4 w-4" />
-              Create Subscription Plan
-            </Button>
-            <Button className="w-full justify-start gap-3" variant="outline" data-testid="button-view-reports">
+            <Dialog open={showAddUserDialog} onOpenChange={setShowAddUserDialog}>
+              <DialogTrigger asChild>
+                <Button className="w-full justify-start gap-3" variant="outline" data-testid="button-add-user">
+                  <Plus className="h-4 w-4" />
+                  Add New User
+                </Button>
+              </DialogTrigger>
+              <DialogContent className="max-w-md">
+                <DialogHeader>
+                  <DialogTitle className="font-heading">Add New User</DialogTitle>
+                </DialogHeader>
+                <div className="space-y-4 mt-4">
+                  <div>
+                    <Label htmlFor="user-name">Full Name</Label>
+                    <Input
+                      id="user-name"
+                      placeholder="John Doe"
+                      className="mt-1.5"
+                      value={newUserData.name}
+                      onChange={(e) => setNewUserData({ ...newUserData, name: e.target.value })}
+                    />
+                  </div>
+                  <div>
+                    <Label htmlFor="user-email">Email</Label>
+                    <Input
+                      id="user-email"
+                      type="email"
+                      placeholder="john@example.com"
+                      className="mt-1.5"
+                      value={newUserData.email}
+                      onChange={(e) => setNewUserData({ ...newUserData, email: e.target.value })}
+                    />
+                  </div>
+                  <div>
+                    <Label htmlFor="user-username">Username</Label>
+                    <Input
+                      id="user-username"
+                      placeholder="johndoe"
+                      className="mt-1.5"
+                      value={newUserData.username}
+                      onChange={(e) => setNewUserData({ ...newUserData, username: e.target.value })}
+                    />
+                  </div>
+                  <Button 
+                    className="w-full bg-primary hover:bg-primary/90" 
+                    onClick={handleAddUser}
+                    disabled={isCreatingUser}
+                  >
+                    {isCreatingUser ? 'Creating...' : 'Create User'}
+                  </Button>
+                </div>
+              </DialogContent>
+            </Dialog>
+
+            <Dialog open={showCreatePlanDialog} onOpenChange={setShowCreatePlanDialog}>
+              <DialogTrigger asChild>
+                <Button className="w-full justify-start gap-3" variant="outline" data-testid="button-create-plan">
+                  <CreditCard className="h-4 w-4" />
+                  Create Subscription Plan
+                </Button>
+              </DialogTrigger>
+              <DialogContent className="max-w-lg">
+                <DialogHeader>
+                  <DialogTitle className="font-heading">Create Subscription Plan</DialogTitle>
+                </DialogHeader>
+                <div className="space-y-4 mt-4">
+                  <div className="grid grid-cols-2 gap-4">
+                    <div>
+                      <Label htmlFor="plan-name">Plan Name</Label>
+                      <Input
+                        id="plan-name"
+                        placeholder="e.g., Premium"
+                        className="mt-1.5"
+                        value={newPlan.name}
+                        onChange={(e) => setNewPlan({ ...newPlan, name: e.target.value })}
+                      />
+                    </div>
+                    <div>
+                      <Label htmlFor="plan-price">Price (BDT)</Label>
+                      <Input
+                        id="plan-price"
+                        type="number"
+                        placeholder="499"
+                        className="mt-1.5"
+                        value={newPlan.price}
+                        onChange={(e) => setNewPlan({ ...newPlan, price: e.target.value })}
+                      />
+                    </div>
+                  </div>
+                  <div className="grid grid-cols-2 gap-4">
+                    <div>
+                      <Label htmlFor="plan-ai-credits">AI Credits / Month</Label>
+                      <Input
+                        id="plan-ai-credits"
+                        type="number"
+                        placeholder="500"
+                        className="mt-1.5"
+                        value={newPlan.aiCredits}
+                        onChange={(e) => setNewPlan({ ...newPlan, aiCredits: e.target.value })}
+                      />
+                    </div>
+                    <div>
+                      <Label htmlFor="plan-ocr-pages">OCR Pages / Month</Label>
+                      <Input
+                        id="plan-ocr-pages"
+                        type="number"
+                        placeholder="200"
+                        className="mt-1.5"
+                        value={newPlan.ocrPages}
+                        onChange={(e) => setNewPlan({ ...newPlan, ocrPages: e.target.value })}
+                      />
+                    </div>
+                  </div>
+                  <div>
+                    <Label htmlFor="plan-storage">Storage Limit</Label>
+                    <Input
+                      id="plan-storage"
+                      placeholder="e.g., 10GB"
+                      className="mt-1.5"
+                      value={newPlan.storage}
+                      onChange={(e) => setNewPlan({ ...newPlan, storage: e.target.value })}
+                    />
+                  </div>
+                  <Button
+                    className="w-full bg-primary hover:bg-primary/90"
+                    onClick={handleCreatePlan}
+                  >
+                    Create Plan
+                  </Button>
+                </div>
+              </DialogContent>
+            </Dialog>
+
+            <Button className="w-full justify-start gap-3" variant="outline" onClick={handleGenerateReports} data-testid="button-view-reports">
               <FileText className="h-4 w-4" />
               Generate Reports
-            </Button>
-            <Button className="w-full justify-start gap-3" variant="outline" data-testid="button-sync-data">
-              <RefreshCw className="h-4 w-4" />
-              Sync Bkash Payments
-            </Button>
-            <Button className="w-full justify-start gap-3 bg-primary text-primary-foreground hover:bg-primary/90" data-testid="button-broadcast">
-              <Activity className="h-4 w-4" />
-              Send Broadcast
             </Button>
           </CardContent>
         </Card>

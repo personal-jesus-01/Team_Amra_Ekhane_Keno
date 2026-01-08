@@ -7,13 +7,11 @@ import {
   Presentation,
   Brain,
   Mic,
-  Wallet,
   Settings,
   HeadphonesIcon,
   ScrollText,
   ChevronLeft,
   ChevronRight,
-  Bell,
   Search,
   Moon,
   Sun,
@@ -30,7 +28,6 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
-import { Badge } from '@/components/ui/badge';
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
 
 const navigation = [
@@ -38,9 +35,6 @@ const navigation = [
   { name: 'Users', href: '/admin/users', icon: Users },
   { name: 'Subscriptions', href: '/admin/subscriptions', icon: CreditCard },
   { name: 'Slides', href: '/admin/slides', icon: Presentation },
-  { name: 'AI Usage', href: '/admin/ai-usage', icon: Brain },
-  { name: 'Assessments', href: '/admin/assessments', icon: Mic },
-  { name: 'Payments', href: '/admin/payments', icon: Wallet },
   { name: 'Settings', href: '/admin/settings', icon: Settings },
   { name: 'Support', href: '/admin/support', icon: HeadphonesIcon },
   { name: 'Audit Logs', href: '/admin/logs', icon: ScrollText },
@@ -83,7 +77,7 @@ export function AdminLayout({ children, title, subtitle }: AdminLayoutProps) {
             </Link>
           )}
           {collapsed && (
-            <span className="font-display text-xl text-primary mx-auto" data-testid="logo-collapsed">SF</span>
+            <span className="font-display text-xl text-primary mx-auto" data-testid="logo-collapsed">SB</span>
           )}
           <Button
             variant="ghost"
@@ -195,40 +189,6 @@ export function AdminLayout({ children, title, subtitle }: AdminLayoutProps) {
             >
               {darkMode ? <Sun className="h-5 w-5" /> : <Moon className="h-5 w-5" />}
             </Button>
-
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <Button variant="ghost" size="icon" className="relative hover:bg-accent" data-testid="button-notifications">
-                  <Bell className="h-5 w-5" />
-                  <Badge className="absolute -top-1 -right-1 h-5 w-5 p-0 flex items-center justify-center text-xs">
-                    3
-                  </Badge>
-                </Button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent align="end" className="w-80">
-                <div className="px-4 py-3 border-b">
-                  <p className="font-heading text-sm">Notifications</p>
-                </div>
-                <DropdownMenuItem className="py-3">
-                  <div>
-                    <p className="text-sm font-medium">New user signup</p>
-                    <p className="text-xs text-muted-foreground">Ahmed Rahman joined 2 min ago</p>
-                  </div>
-                </DropdownMenuItem>
-                <DropdownMenuItem className="py-3">
-                  <div>
-                    <p className="text-sm font-medium">Payment received</p>
-                    <p className="text-xs text-muted-foreground">৳799 from Fatima Khan</p>
-                  </div>
-                </DropdownMenuItem>
-                <DropdownMenuItem className="py-3">
-                  <div>
-                    <p className="text-sm font-medium">Storage warning</p>
-                    <p className="text-xs text-muted-foreground">85% capacity reached</p>
-                  </div>
-                </DropdownMenuItem>
-              </DropdownMenuContent>
-            </DropdownMenu>
 
             <DropdownMenu>
               <DropdownMenuTrigger asChild>

@@ -1,4 +1,4 @@
-import { ReactNode } from 'react';
+import { useState, useMemo } from 'react';
 import {
   Table,
   TableBody,
@@ -15,7 +15,7 @@ import { Search, ChevronLeft, ChevronRight, Download } from 'lucide-react';
 interface Column<T> {
   key: string;
   header: string;
-  render?: (item: T) => ReactNode;
+  render?: (item: T) => React.ReactNode;
   className?: string;
 }
 
@@ -24,9 +24,11 @@ interface DataTableProps<T> {
   columns: Column<T>[];
   searchPlaceholder?: string;
   onSearch?: (query: string) => void;
-  actions?: ReactNode;
+  actions?: React.ReactNode;
   testIdPrefix?: string;
 }
+
+const ITEMS_PER_PAGE = 10;
 
 export function DataTable<T extends { id: string | number }>({
   data,
@@ -36,6 +38,37 @@ export function DataTable<T extends { id: string | number }>({
   actions,
   testIdPrefix = "table",
 }: DataTableProps<T>) {
+  const [searchQuery, setSearchQuery] = useState('');
+  const [currentPage, setCurrentPage] = useState(1);
+
+  // Filter data based on search query
+  const filteredData = useMemo(() => {
+    if (!searchQuery) return data;
+    return data.filter(item => {
+      const itemStr = JSON.stringify(item).toLowerCase();
+      return itemStr.includes(searchQuery.toLowerCase());
+    });
+  }, [data, searchQuery]);
+
+  // Paginate filtered data
+  const totalPages = Math.ceil(filteredData.length / ITEMS_PER_PAGE);
+  const startIdx = (currentPage - 1) * ITEMS_PER_PAGE;
+  const paginatedData = filteredData.slice(startIdx, startIdx + ITEMS_PER_PAGE);
+
+  const handleSearch = (query: string) => {
+    setSearchQuery(query);
+    setCurrentPage(1); // Reset to first page on search
+    onSearch?.(query);
+  };
+
+  const handlePrevPage = () => {
+    setCurrentPage(prev => Math.max(prev - 1, 1));
+  };
+
+  const handleNextPage = () => {
+    setCurrentPage(prev => Math.min(prev + 1, totalPages));
+  };
+
   return (
     <Card className="border-border/50 overflow-hidden">
       <div className="p-4 border-b border-border/50 flex flex-col sm:flex-row gap-4 items-start sm:items-center justify-between">
@@ -44,7 +77,8 @@ export function DataTable<T extends { id: string | number }>({
           <Input
             placeholder={searchPlaceholder}
             className="pl-10 w-full sm:w-64 bg-background/50"
-            onChange={(e) => onSearch?.(e.target.value)}
+            value={searchQuery}
+            onChange={(e) => handleSearch(e.target.value)}
             data-testid={`${testIdPrefix}-search`}
           />
         </div>
@@ -69,37 +103,73 @@ export function DataTable<T extends { id: string | number }>({
             </TableRow>
           </TableHeader>
           <TableBody>
-            {data.map((item, index) => (
-              <TableRow
-                key={item.id}
-                className="border-border/50 hover:bg-accent/50 transition-colors"
-                data-testid={`${testIdPrefix}-row-${item.id}`}
-              >
-                {columns.map((col) => (
-                  <TableCell key={col.key} className={col.className}>
-                    {col.render ? col.render(item) : (item as any)[col.key]}
-                  </TableCell>
-                ))}
+            {paginatedData.length > 0 ? (
+              paginatedData.map((item) => (
+                <TableRow
+                  key={item.id}
+                  className="border-border/50 hover:bg-accent/50 transition-colors"
+                  data-testid={`${testIdPrefix}-row-${item.id}`}
+                >
+                  {columns.map((col) => (
+                    <TableCell key={col.key} className={col.className}>
+                      {col.render ? col.render(item) : (item as any)[col.key]}
+                    </TableCell>
+                  ))}
+                </TableRow>
+              ))
+            ) : (
+              <TableRow>
+                <TableCell colSpan={columns.length} className="text-center py-8 text-muted-foreground">
+                  No results found
+                </TableCell>
               </TableRow>
-            ))}
+            )}
           </TableBody>
         </Table>
       </div>
 
       <div className="p-4 border-t border-border/50 flex items-center justify-between">
         <p className="text-sm text-muted-foreground">
-          Showing <span className="font-medium text-foreground">{data.length}</span> results
+          Showing <span className="font-medium text-foreground">{paginatedData.length}</span> of{' '}
+          <span className="font-medium text-foreground">{filteredData.length}</span> results
         </p>
         <div className="flex items-center gap-2">
-          <Button variant="outline" size="icon" className="h-8 w-8" data-testid={`${testIdPrefix}-prev`}>
+          <Button
+            variant="outline"
+            size="icon"
+            className="h-8 w-8"
+            onClick={handlePrevPage}
+            disabled={currentPage === 1}
+            data-testid={`${testIdPrefix}-prev`}
+          >
             <ChevronLeft className="h-4 w-4" />
           </Button>
-          <Button variant="outline" size="sm" className="h-8 min-w-8 bg-primary text-primary-foreground border-primary">
-            1
-          </Button>
-          <Button variant="outline" size="sm" className="h-8 min-w-8">2</Button>
-          <Button variant="outline" size="sm" className="h-8 min-w-8">3</Button>
-          <Button variant="outline" size="icon" className="h-8 w-8" data-testid={`${testIdPrefix}-next`}>
+          <div className="flex items-center gap-1">
+            {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
+              <Button
+                key={page}
+                variant="outline"
+                size="sm"
+                className={`h-8 min-w-8 ${
+                  currentPage === page
+                    ? 'bg-primary text-primary-foreground border-primary'
+                    : ''
+                }`}
+                onClick={() => setCurrentPage(page)}
+                data-testid={`${testIdPrefix}-page-${page}`}
+              >
+                {page}
+              </Button>
+            ))}
+          </div>
+          <Button
+            variant="outline"
+            size="icon"
+            className="h-8 w-8"
+            onClick={handleNextPage}
+            disabled={currentPage === totalPages}
+            data-testid={`${testIdPrefix}-next`}
+          >
             <ChevronRight className="h-4 w-4" />
           </Button>
         </div>

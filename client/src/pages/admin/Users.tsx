@@ -19,28 +19,70 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from '@/components/ui/dialog';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
 import { Plus, MoreHorizontal, Eye, Edit, Ban, Trash2, Filter } from 'lucide-react';
-import { users } from '@/lib/mockData';
+import { users as mockUsers } from '@/lib/mockData';
+import { useUsers, useDeleteUser, useCreateUser } from '@/hooks/useApi';
 
 export default function Users() {
   const [statusFilter, setStatusFilter] = useState<string>('all');
   const [planFilter, setPlanFilter] = useState<string>('all');
+  const [showAddUserDialog, setShowAddUserDialog] = useState(false);
+  const [newUserData, setNewUserData] = useState({ name: '', email: '', username: '' });
+  const { data: dbUsers = [], isLoading } = useUsers();
+  const { mutate: createUser, isPending: isCreatingUser } = useCreateUser();
+  
+  // Use DB users if available, otherwise use mock data
+  const displayUsers = dbUsers.length > 0 ? dbUsers.map((u: any) => ({
+    id: u.id,
+    name: u.name || u.username,
+    email: u.email,
+    plan: 'Basic', // Not in schema, default to Basic
+    status: 'active' as const,
+    slides: 0,
+    joinDate: u.created_at ? new Date(u.created_at).toLocaleDateString() : '',
+    lastActive: 'Now',
+  })) : mockUsers;
 
-  const filteredUsers = users.filter((user) => {
+  const filteredUsers = displayUsers.filter((user) => {
     if (statusFilter !== 'all' && user.status !== statusFilter) return false;
     if (planFilter !== 'all' && user.plan !== planFilter) return false;
     return true;
   });
 
+  const handleAddUser = () => {
+    if (newUserData.name && newUserData.email && newUserData.username) {
+      createUser(newUserData, {
+        onSuccess: () => {
+          setShowAddUserDialog(false);
+          setNewUserData({ name: '', email: '', username: '' });
+        },
+        onError: (error) => {
+          alert('Failed to create user: ' + (error as any).message);
+        },
+      });
+    } else {
+      alert('Please fill all fields');
+    }
+  };
+
   const columns = [
     {
       key: 'user',
       header: 'User',
-      render: (user: typeof users[0]) => (
+      render: (user: any) => (
         <div className="flex items-center gap-3">
           <Avatar className="h-9 w-9 border border-border">
             <AvatarFallback className="bg-primary/10 text-primary font-heading text-xs">
-              {user.name.split(' ').map(n => n[0]).join('')}
+              {user.name.split(' ').map((n: string) => n[0]).join('')}
             </AvatarFallback>
           </Avatar>
           <div>
@@ -53,7 +95,7 @@ export default function Users() {
     {
       key: 'plan',
       header: 'Plan',
-      render: (user: typeof users[0]) => (
+      render: (user: any) => (
         <span className={`font-medium text-sm ${
           user.plan === 'Enterprise' ? 'text-purple-400' :
           user.plan === 'Pro' ? 'text-blue-400' : 'text-muted-foreground'
@@ -65,26 +107,26 @@ export default function Users() {
     {
       key: 'status',
       header: 'Status',
-      render: (user: typeof users[0]) => <StatusBadge status={user.status as any} />,
+      render: (user: any) => <StatusBadge status={user.status as any} />,
     },
     {
       key: 'slides',
       header: 'Slides',
-      render: (user: typeof users[0]) => (
+      render: (user: any) => (
         <span className="font-heading text-sm">{user.slides}</span>
       ),
     },
     {
       key: 'joinDate',
       header: 'Joined',
-      render: (user: typeof users[0]) => (
+      render: (user: any) => (
         <span className="text-sm text-muted-foreground">{user.joinDate}</span>
       ),
     },
     {
       key: 'lastActive',
       header: 'Last Active',
-      render: (user: typeof users[0]) => (
+      render: (user: any) => (
         <span className="text-sm text-muted-foreground">{user.lastActive}</span>
       ),
     },
@@ -92,7 +134,7 @@ export default function Users() {
       key: 'actions',
       header: '',
       className: 'w-12',
-      render: (user: typeof users[0]) => (
+      render: (user: any) => (
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button variant="ghost" size="icon" className="h-8 w-8" data-testid={`button-actions-${user.id}`}>
@@ -153,10 +195,59 @@ export default function Users() {
           </Select>
         </div>
         <div className="flex-1" />
-        <Button className="bg-primary hover:bg-primary/90" data-testid="button-add-user">
-          <Plus className="h-4 w-4 mr-2" />
-          Add User
-        </Button>
+        <Dialog open={showAddUserDialog} onOpenChange={setShowAddUserDialog}>
+          <DialogTrigger asChild>
+            <Button className="bg-primary hover:bg-primary/90" data-testid="button-add-user">
+              <Plus className="h-4 w-4 mr-2" />
+              Add User
+            </Button>
+          </DialogTrigger>
+          <DialogContent className="max-w-md">
+            <DialogHeader>
+              <DialogTitle className="font-heading">Add New User</DialogTitle>
+            </DialogHeader>
+            <div className="space-y-4 mt-4">
+              <div>
+                <Label htmlFor="add-user-name">Full Name</Label>
+                <Input
+                  id="add-user-name"
+                  placeholder="John Doe"
+                  className="mt-1.5"
+                  value={newUserData.name}
+                  onChange={(e) => setNewUserData({ ...newUserData, name: e.target.value })}
+                />
+              </div>
+              <div>
+                <Label htmlFor="add-user-email">Email</Label>
+                <Input
+                  id="add-user-email"
+                  type="email"
+                  placeholder="john@example.com"
+                  className="mt-1.5"
+                  value={newUserData.email}
+                  onChange={(e) => setNewUserData({ ...newUserData, email: e.target.value })}
+                />
+              </div>
+              <div>
+                <Label htmlFor="add-user-username">Username</Label>
+                <Input
+                  id="add-user-username"
+                  placeholder="johndoe"
+                  className="mt-1.5"
+                  value={newUserData.username}
+                  onChange={(e) => setNewUserData({ ...newUserData, username: e.target.value })}
+                />
+              </div>
+              <Button 
+                className="w-full bg-primary hover:bg-primary/90" 
+                onClick={handleAddUser}
+                disabled={isCreatingUser}
+              >
+                {isCreatingUser ? 'Creating...' : 'Create User'}
+              </Button>
+            </div>
+          </DialogContent>
+        </Dialog>
       </div>
 
       <DataTable
